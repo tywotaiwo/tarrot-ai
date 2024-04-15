@@ -1,0 +1,102 @@
+.container {
+    min-height: 100vh;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #9e768f 0%, #9fa4c4 100%); /* Smoother gradient background */
+}
+
+.main {
+    padding: 5rem 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fefefe; /* Slightly off-white color for a softer look */
+}
+
+.title {
+    margin: 0;
+    line-height: 1.15;
+    font-size: 4.5rem; /* Slightly larger title */
+    text-align: center;
+    color: #ffefc0; /* Goldish color for elegance */
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+}
+
+.shuffleButton, .readingButton {
+    margin: 20px;
+    padding: 15px 30px; /* Larger padding for a bigger button */
+    font-size: 18px; /* Larger font size */
+    background-color: #6441a5; /* Deep purple color */
+    color: #dcdcdc; /* Light text color for contrast */
+    border: none;
+    border-radius: 20px; /* More pronounced rounding of edges */
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for 3D effect */
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+
+.shuffleButton.shuffling {
+    background-color: #e09b3d; /* Orange color to indicate activity */
+    box-shadow: 0 0 20px #e09b3d; /* Glowing effect */
+}
+
+.cardContainer {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px; /* Uniform space between cards */
+}
+
+.card {
+    margin: 10px;
+    cursor: pointer;
+    border: 3px solid #443f3d; /* More pronounced border color */
+    transition: border-color 0.3s, transform 0.3s;
+    background-color: #1c1c1c; /* Dark background for card to pop out */
+    border-radius: 10px; /* Rounded edges for cards */
+    overflow: hidden; /* Ensures no overflow beyond the border radius */
+}
+
+.card:hover, .card.selected {
+    border-color: #c0a080; /* Highlight color for selection */
+    transform: translateY(-10px); /* Slight lift effect on hover/selection */
+}
+
+.cardImage {
+    width: 100px;
+    height: 160px;
+    transition: transform 0.3s; /* Smooth transition for images */
+}
+
+.cardName {
+    font-size: 1.2rem;
+    color: #f0e6d2; /* Light color for the text */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* Text shadow for readability */
+}
+.questionInput {
+    width: 80%; /* Or any width you prefer */
+    height: 100px; /* Or any height you prefer */
+    margin-bottom: 20px; /* Spacing */
+    padding: 10px; /* Padding inside the textarea */
+    border-radius: 10px; /* Rounded corners */
+    border: 1px solid #ccc; /* Border color */
+    font-size: 16px; /* Text size */
+    color: #333; /* Text color */
+    background-color: #fff; /* Background color */
+  }
+.reading {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #d3d3d3;
+    border-radius: 12px; /* Soft rounded edges */
+    background: rgba(255, 255, 255, 0.9); /* Semi-transparent background for readability */
+    color: #000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 600px; /* Max width for large screens */
+    word-wrap: break-word; /* Ensures text doesn't overflow */
+}
