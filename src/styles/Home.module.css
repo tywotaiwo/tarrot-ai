@@ -78,6 +78,71 @@
     color: #f0e6d2; /* Light color for the text */
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* Text shadow for readability */
 }
+.shufflingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center items horizontally in the container */
+    justify-content: center; /* Center items vertically in the container */
+    width: 100%; /* Ensure the container takes full width to center content properly */
+    height: auto; /* Adjust height as needed or keep it auto */
+    margin-top: 20px; /* Optional: add top margin for spacing */
+}
+.questionText {
+    font-size: 1.5rem; /* Size of the font */
+    color: #f8f8f2; /* Color of the font */
+    background-color: #44475a; /* Background color */
+    border-radius: 8px; /* Rounded corners */
+    padding: 15px; /* Padding inside the container */
+    margin: 20px 0; /* Margin for spacing */
+    border: 1px solid #6272a4; /* Subtle border color */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+    text-align: center; /* Center align the text */
+    width: 80%; /* Width of the container */
+    max-width: 600px; /* Maximum width */
+    margin-left: auto; /* Margins for auto to center the container */
+    margin-right: auto;
+    word-wrap: break-word; /* Wrap long words */
+}
+
+.stopShufflingButton {
+    padding: 15px 30px; /* Consistent with other buttons */
+    font-size: 18px; /* Large text for visibility */
+    background-color: #ff6347; /* Vibrant red color for urgency */
+    color: #ffffff; /* White text for contrast */
+    border: none;
+    border-radius: 20px; /* Rounded edges */
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Slight shadow for depth */
+    transition: background-color 0.3s, transform 0.3s; /* Smooth transition for interactions */
+    width: auto; /* Remove full width */
+    max-width: 300px; /* Maximum button width, adjust as necessary */
+    margin: 10px auto; /* Top and bottom margin of 10px, left and right auto for centering */
+   
+}
+
+
+.stopShufflingButton:hover {
+    background-color: #e05342; /* A slightly darker shade on hover for tactile feedback */
+    transform: translateY(-2px); /* Subtle lift effect */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Increased shadow when hovered */
+}
+.stopShufflingButton, .activityIndicator {
+    width: 100%; /* Make button and text take full width of their container */
+    text-align: center; /* Center text inside the button and the 'Shuffling...' text element */
+    margin: 10px 0; /* Add some vertical margin for spacing */
+}
+
+@keyframes shuffleAnimation {
+    0%, 100% { transform: scale(1) rotateY(0); }
+    25% { transform: scale(1.1) rotateY(180deg); }
+    50% { transform: scale(1) rotateY(360deg); }
+    75% { transform: scale(1.1) rotateY(180deg); }
+}
+
+.shufflingEffect {
+    animation: shuffleAnimation 0.6s infinite;
+}
+
 .questionInput {
     width: 80%; /* Or any width you prefer */
     height: 100px; /* Or any height you prefer */

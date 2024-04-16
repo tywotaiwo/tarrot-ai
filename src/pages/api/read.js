@@ -1,6 +1,5 @@
 // pages/api/read.js
 import { Configuration, OpenAIApi } from "openai";
-// pages/api/read.js
 
 export default async function handler(req, res) {
     // Simulate a delay to mimic API call latency
