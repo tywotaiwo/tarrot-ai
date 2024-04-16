@@ -87,6 +87,10 @@
     height: auto; /* Adjust height as needed or keep it auto */
     margin-top: 20px; /* Optional: add top margin for spacing */
 }
+.rotated {
+    transform: rotate(180deg); 
+}
+
 .questionText {
     font-size: 1.5rem; /* Size of the font */
     color: #f8f8f2; /* Color of the font */
