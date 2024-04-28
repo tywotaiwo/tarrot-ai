@@ -90,6 +90,89 @@
 .rotated {
     transform: rotate(180deg); 
 }
+.tabContainer {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin: 20px 0;
+}
+
+.readingButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #6441a5;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+.cardStackContainer {
+    position: relative;
+    width: 120px; /* Adjust width to match your card size */
+    height: 180px; /* Adjust height to match your card size */
+    margin: 20px;
+}
+
+.stackedCard {
+    position: absolute;
+    top: 0;
+    left: 50%; /* Center the cards */
+    transform: translateX(-50%); /* Adjust the horizontal positioning */
+    transition: transform 0.3s ease-in-out;
+    
+}
+
+.stackedCardImage {
+    
+    border-radius: 10px; /* Rounded edges for cards */
+    width: 140px; /* Adjust to fit your card dimensions */
+    height: 200px; /* Adjust to fit your card dimensions */
+    object-fit: cover; /* Ensures the image covers the div without distorting */
+
+        margin: 10px;
+        cursor: pointer;
+        border: 3px solid #443f3d; /* More pronounced border color */
+        transition: border-color 0.3s, transform 0.3s;
+        background-color: #1c1c1c; /* Dark background for card to pop out */
+        border-radius: 10px; /* Rounded edges for cards */
+        overflow: hidden; /* Ensures no overflow beyond the border radius */
+    
+}
+
+.readingButton:hover, .readingButton.selected {
+    background-color: #7a6fb1;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Space between buttons */
+    margin-top: 20px;
+}
+
+.readingTypeButton {
+    background-color: #6441a5; /* Deep purple background */
+    color: #fff; /* White text */
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s; /* Smooth transition for hover effects */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Subtle shadow for 3D effect */
+}
+
+.readingTypeButton:hover {
+    background-color: #7a6fb1; /* Lighter purple on hover */
+    transform: scale(1.05); /* Slightly enlarge button on hover */
+}
+
+.readingTypeButton:active {
+    transform: scale(0.95); /* Slightly shrink button when clicked */
+    background-color: #563d87; /* Darker purple when active */
+}
 
 .questionText {
     font-size: 1.5rem; /* Size of the font */
@@ -124,12 +207,12 @@
    
 }
 
-
 .stopShufflingButton:hover {
     background-color: #e05342; /* A slightly darker shade on hover for tactile feedback */
     transform: translateY(-2px); /* Subtle lift effect */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Increased shadow when hovered */
 }
+
 .stopShufflingButton, .activityIndicator {
     width: 100%; /* Make button and text take full width of their container */
     text-align: center; /* Center text inside the button and the 'Shuffling...' text element */
