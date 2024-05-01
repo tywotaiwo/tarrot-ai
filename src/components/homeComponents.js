@@ -1,9 +1,80 @@
 import styles from '../styles/Home.module.css';
 
+export function ThreeCardReadingSelection({ category, onSelectSpread }) {
+    const threeCardSpreads = {
+        'Linear': [
+            { name: 'Past, Present, Future', description: 'Evaluates the flow of time or progression through situations.' },
+            { name: 'You, Your Path, Your Potential', description: 'Focuses on personal development and future possibilities.' },
+            { name: 'You, Relationship, Partner', description: 'Analyzes the dynamics within a relationship from personal to relational context.' },
+            { name: 'Situation, Action, Outcome', description: 'Looks at a specific situation, the action taken, and the potential results.' },
+            { name: 'Idea, Process, Aspiration', description: 'Explores the development from an initial idea through the process to the final goal or aspiration.' }
+        ],
+        'Balanced': [
+            { name: 'Mind, Body, Spirit', description: 'Balances aspects of wellness and personal integration.' },
+            { name: 'Physical State, Emotional State, Spiritual State', description: 'Delves into the different states of personal existence and health.' },
+            { name: 'Subconscious, Conscious, Super Conscious', description: 'Explores different levels of awareness and cognitive processes.' },
+            { name: 'Option 1, Option 2, Option 3', description: 'Provides clarity on multiple choices or paths.' },
+            { name: 'What I Think, What I Feel, What I Do', description: 'Connects thoughts, emotions, and actions, showing how they influence each other.' }
+        ],
+        'Foundational': [
+            { name: 'Given your strengths and weaknesses, this is my advice.', description: 'Offers guidance based on personal strengths and areas for improvement.' },
+            { name: 'Given what worked well, and what didn’t work well, this is the key lesson.', description: 'Draws lessons from past actions and outcomes.' },
+            { name: 'Given that this brings you together, and that this pulls you apart, you must focus on this.', description: 'Advises on relationship dynamics and focal points for harmony or discord.' },
+            { name: 'Given that you want this from the relationship, and your partner wants this, your relationship is heading towards this.', description: 'Predicts the trajectory of a relationship based on mutual desires and intentions.' },
+            { name: 'Given Option 1 and Option 2, This is what you need to know to make a decision.', description: 'Helps in decision-making by weighing two options against their possible outcomes.' }
+        ],
+        'Crossed': [
+            { name: 'Situation, Obstacle, Advice', description: 'Analyzes a current situation, identifies major obstacles, and offers advice.' },
+            { name: 'Aspiration, Obstacle, How to Overcome', description: 'Focuses on achieving a goal, overcoming barriers, and strategies for success.' },
+            { name: 'Opportunities, Challenges, Outcome', description: 'Looks at available opportunities, potential challenges, and the likely outcome.' },
+            { name: 'Thesis, Antithesis, Synthesis', description: 'Uses a dialectical method to explore and resolve conflicts or debates.' }
+        ]
+    };
+
+    const spreadsToShow = threeCardSpreads[category] || [];
+
+    return (
+        <div className={styles.spreadSelectionContainer}>
+            <h2>{category} 3 Card Tarot Spreads</h2>
+            {spreadsToShow.map(spread => (
+                <div key={spread.name} className={styles.spreadOption}>
+                    <h3>{spread.name}</h3>
+                    <p>{spread.description}</p>
+                    <button className={styles.selectSpreadButton} onClick={() => onSelectSpread(spread)}>
+                        Select This Spread
+                    </button>
+                </div>
+            ))}
+        </div>
+    );
+}
+
+export function CategorySelection({ onSelectCategory }) {
+    const categories = [
+        { name: 'Linear', description: 'Understand linear progressions like past, present, and future.' },
+        { name: 'Balanced', description: 'Explore balanced aspects such as mind, body, and spirit.' },
+        { name: 'Foundational', description: 'Get foundational advice based on different scenarios.' },
+        { name: 'Crossed', description: 'Resolve conflicts with spreads that identify challenges and provide solutions.' }
+    ];
+
+    return (
+        <div className={styles.buttonContainer}>
+            {categories.map(category => (
+                <div key={category.name} className={styles.categoryOption}>
+                    <h3>{category.name}</h3>
+                    <p>{category.description}</p>
+                    <button className={styles.readingTypeButton} onClick={() => onSelectCategory(category.name)}>
+                        Select {category.name}
+                    </button>
+                </div>
+            ))}
+        </div>
+    );
+}
 
 export function ReadingTypeSelection({ onTypeSelect }) {
   const readingTypes = [
-    { type: 'Three-Card Spread', maxCards: 3 },
+    { type: 'Three Card Spread', maxCards: 3 },
     { type: 'Celtic Cross Spread', maxCards: 10 },
     { type: 'One-Card Daily', maxCards: 1 },
     { type: 'Love Spread', maxCards: 6 },
@@ -20,6 +91,7 @@ export function ReadingTypeSelection({ onTypeSelect }) {
     </div>
   );
 }
+
 
 export function LoveReadingSelection({ onSelectLoveSpread }) {
     const loveSpreads = [
@@ -88,29 +160,6 @@ export function LoveReadingSelection({ onSelectLoveSpread }) {
     );
   }
 
-  export function ThreeCardReadingSelection({ onSelectThreeCardSpread }) {
-    const threeCardSpreads = [
-        { name: 'Linear 3 Card Tarot Spreads', description: 'These spreads suggest a sequence or a linear path, which can be great for understanding progression or cause and effect. Choose from various layouts such as Past, Present, Future; You, Your Path, Your Potential; You, Relationship, Partner; Situation, Action, Outcome; and Idea, Process, Aspiration.', maxCards: 3 },
-        { name: 'Balanced 3 Card Tarot Spreads', description: 'You, Your Path, Your Potential. Focuses on personal development and future possibilities.', maxCards: 3 },
-      { name: 'Foundational 3 Card Tarot Spreads', description: 'Analyzes the dynamics within a relationship from personal to relational context.', maxCards: 3 },
-      { name: 'Crossed 3 Card Tarot Spreads', description: 'Looks at a specific situation, the action taken, and the potential results.', maxCards: 3 },
-    ];
-  
-    return (
-      <div className={styles.spreadSelectionContainer}>
-        <p>These spreads suggest a sequence or a linear path, which can be great for understanding progression or cause and effect.</p>
-        {threeCardSpreads.map((spread) => (
-          <div key={spread.name} className={styles.spreadOption}>
-            <h3>{spread.name}</h3>
-            <p>{spread.description}</p>
-            <button className={styles.selectSpreadButton} onClick={() => onSelectThreeCardSpread(spread)}>
-              Select This Spread
-            </button>
-          </div>
-        ))}
-      </div>
-    );
-  }
   
 export function ShuffleAndCutr({ isShuffling, startShuffling, stopShuffling, displayCutUI }) {
     return (

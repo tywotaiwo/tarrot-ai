@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { CareerReadingSelection , ReadingTypeSelection, LoveReadingSelection, CardSelection, ShuffleAndCut, ReadingDisplay, ThreeCardReadingSelection } from '../components/homeComponents';
+import { CareerReadingSelection , ReadingTypeSelection, LoveReadingSelection, CardSelection, ShuffleAndCut, ReadingDisplay, ThreeCardReadingSelection, CategorySelection } from '../components/homeComponents';
 import styles from '../styles/Home.module.css';
 import Head from 'next/head';
 
@@ -8,12 +8,17 @@ export default function Home() {
     const [currentStep, setCurrentStep] = useState(1);
     const [selectedReadingType, setSelectedReadingType] = useState('');
     const [selectedLoveSpread, setSelectedLoveSpread] = useState(null);
-    
     const [selectedCareerSpread, setSelectedCareerSpread] = useState(null);
+    const [selectedThreeCardSpread, setSelectedThreeCardSpread] = useState(null);
     const [selectedCards, setSelectedCards] = useState([]);
     const [reading, setReading] = useState('');
     const [userQuestion, setUserQuestion] = useState('');
     const [isShuffling, setIsShuffling] = useState(false);
+
+
+    const [selectedCategory, setSelectedCategory] = useState('');
+
+    
     const handleCut = (index) => {
         // User decides the cut point by clicking a button or dragging a slider
         const newDeck = [...deck.slice(index), ...deck.slice(0, index)];
@@ -58,15 +63,6 @@ export default function Home() {
             setSelectedCards([...selectedCards, card]);
         }
     }; 
-    // Include UI rendering inside your return statement as is, but ensure that it is clean and understandable for the user.
-
-    
-
-    const selectCardold = (card) => {
-        if (selectedCards.length < selectedReadingType.maxCards && !selectedCards.includes(card)) {
-            setSelectedCards([...selectedCards, card]);
-        }
-    };
 
     const reset = () => {
         setSelectedCards([]);
@@ -87,6 +83,36 @@ export default function Home() {
         setCurrentStep(5); // Show the final reading
     };
  
+    
+    const goBack = () => {
+        switch (currentStep) {
+            case 3:
+                if (selectedReadingType.type === 'Three Card Spread') {
+                    setCurrentStep(2); // Go back to category selection from spread selection
+                } else {
+                    setCurrentStep(1); // Go back to reading type selection from specific spread selection
+                }
+                break;
+            case 2:
+                setCurrentStep(1); // Go back to reading type selection from category selection
+                break;
+            case 4:
+                if (selectedReadingType.type === 'Three Card Spread' || selectedReadingType.type === 'Love Spread' || selectedReadingType.type === 'Career Spread') {
+                    setCurrentStep(3); // Go back to spread selection from shuffling
+                } else {
+                    setCurrentStep(2); // Go back to category selection for other types
+                }
+                break;
+            case 5:
+                setCurrentStep(4); // Go back to card selection from the reading display
+                break;
+            case 6:
+                setCurrentStep(5); // Go back to reading display from any end step
+                break;
+            default:
+                setCurrentStep(1); // Default back step if unsure
+        }
+    };
     const startShuffling = () => {
         setIsShuffling(true);
         shuffleIntervalRef.current = setInterval(() => {
@@ -100,22 +126,33 @@ export default function Home() {
         setIsShuffling(false);
         setCurrentStep(3); // Move to allow cutting the deck
     };
+   
     const selectReadingType = (type) => {
         setSelectedReadingType(type);
-        if (type.type === 'Love Spread' || type.type === 'Career Spread') {
-            setCurrentStep(2); // Move to select specific spread
+        if (type.type === 'Three Card Spread') {
+            setCurrentStep(2); // Step to select category of three-card spread
+        } else if (['Love Spread', 'Career Spread'].includes(type.type)) {
+            setCurrentStep(3); // Go to selecting a specific spread
         } else {
-            setCurrentStep(3); // For other types, skip to shuffling/cutting
+            setCurrentStep(4); // Skip to shuffling/cutting
         }
     };
-    
-
+    const selectCategory = (category) => {
+        setSelectedCategory(category);
+        setCurrentStep(3); // Move to select specific spread from the category
+    };
     const selectLoveSpread = (spread) => {
         setSelectedLoveSpread(spread);
-        setCurrentStep(3); // Move to shuffling/cutting after selecting specific spread
+        setCurrentStep(2); // Move to shuffling/cutting after selecting specific spread
     };
+
     const selectCareerSpread = (spread) => {
         setSelectedCareerSpread(spread);
+        setCurrentStep(3); // Move to shuffling/cutting after selecting specific spread
+    };
+
+    const selectThreeCardSpread = (spread) => {
+        setSelectedThreeCardSpread(spread);
         setCurrentStep(3); // Move to shuffling/cutting after selecting specific spread
     };
 
@@ -123,19 +160,24 @@ export default function Home() {
         <div className={styles.container}>
             <Head>
                 <title>Tarot AI - Discover Your Future</title>
+               
                 <meta name="description" content="Discover your future with Tarot AI" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main className={styles.main}>
-    <h1 className={styles.title}>Tarot AI - Discover Your Future</h1>
-    {currentStep === 1 && <ReadingTypeSelection onTypeSelect={selectReadingType} />}
-    {(currentStep === 2 && selectedReadingType.type === 'Love Spread') && <LoveReadingSelection onSelectLoveSpread={selectLoveSpread} />}
-    {(currentStep === 2 && selectedReadingType.type === 'Career Spread') && <CareerReadingSelection onSelectCareerSpread={selectCareerSpread} />}
-    {currentStep === 3 && <ShuffleAndCut {...{ isShuffling, startShuffling, stopShuffling, displayCutUI }} />}
-    {currentStep === 4 && <CardSelection {...{ deck, maxCards: selectedLoveSpread ? selectedLoveSpread.maxCards : selectedReadingType.maxCards, onCardSelect: selectCard }} />}
-    {currentStep === 5 && <ReadingDisplay reading={reading} onReset={reset} />}
-</main>
-
+                <h1 className={styles.title}>Tarot AI - Discover Your Future</h1>
+                {currentStep > 1 && (
+                    <button onClick={goBack} className={styles.backButton}>Go Back</button>
+                )}
+                {currentStep === 1 && <ReadingTypeSelection onTypeSelect={selectReadingType} />}
+                {currentStep === 2 && selectedReadingType.type === 'Three Card Spread' && <CategorySelection onSelectCategory={selectCategory} />}
+                {currentStep === 3 && selectedCategory && <ThreeCardReadingSelection category={selectedCategory} onSelectSpread={selectThreeCardSpread} />}
+                {currentStep === 3 && selectedReadingType.type === 'Love Spread' && <LoveReadingSelection onSelectLoveSpread={selectLoveSpread} />}
+                {currentStep === 3 && selectedReadingType.type === 'Career Spread' && <CareerReadingSelection onSelectCareerSpread={selectCareerSpread} />}
+                {currentStep === 4 && <ShuffleAndCut isShuffling={isShuffling} startShuffling={startShuffling} stopShuffling={stopShuffling} displayCutUI={displayCutUI} />}
+                {currentStep === 5 && <CardSelection deck={deck} maxCards={selectedThreeCardSpread ? selectedThreeCardSpread.maxCards : selectedReadingType.maxCards} onCardSelect={selectCard} />}
+                {currentStep === 6 && <ReadingDisplay reading={reading} onReset={reset} />}
+            </main>
         </div>
     );
 }
