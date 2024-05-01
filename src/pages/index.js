@@ -1,27 +1,26 @@
 import React, { useState, useRef, useEffect } from 'react';
-import Head from 'next/head';
+import { CareerReadingSelection , ReadingTypeSelection, LoveReadingSelection, CardSelection, ShuffleAndCut, ReadingDisplay } from '../components/homeComponents';
 import styles from '../styles/Home.module.css';
-
+import Head from 'next/head';
 
 export default function Home() {
     const [deck, setDeck] = useState(tarotDeck);
     const [currentStep, setCurrentStep] = useState(1);
     const [selectedReadingType, setSelectedReadingType] = useState('');
+    const [selectedLoveSpread, setSelectedLoveSpread] = useState(null);
+    
+    const [selectedCareerSpread, setSelectedCareerSpread] = useState(null);
     const [selectedCards, setSelectedCards] = useState([]);
     const [reading, setReading] = useState('');
     const [userQuestion, setUserQuestion] = useState('');
     const [isShuffling, setIsShuffling] = useState(false);
-    const shuffleIntervalRef = useRef(null);
-
-  
-    
-
     const handleCut = (index) => {
         // User decides the cut point by clicking a button or dragging a slider
         const newDeck = [...deck.slice(index), ...deck.slice(0, index)];
         setDeck(newDeck);
         setCurrentStep(4); // Proceed to card selection
     };
+
     const shuffleDeck = () => {
         setIsShuffling(true);
         const shuffleTimes = 5; // Shuffle the deck 5 times for better randomness
@@ -58,15 +57,10 @@ export default function Home() {
         if (!selectedCards.includes(card) && selectedCards.length < selectedReadingType.maxCards) {
             setSelectedCards([...selectedCards, card]);
         }
-    };
-    
+    }; 
     // Include UI rendering inside your return statement as is, but ensure that it is clean and understandable for the user.
+
     
-  
-    const selectReadingType = (type) => {
-        setSelectedReadingType(type);
-        setCurrentStep(2);  // Move to card selection/shuffling
-    };
 
     const selectCardold = (card) => {
         if (selectedCards.length < selectedReadingType.maxCards && !selectedCards.includes(card)) {
@@ -81,6 +75,7 @@ export default function Home() {
         setCurrentStep(1);
         shuffleDeck();
     };
+
     const getReading = async () => {
         const response = await fetch('/api/read', {
             method: 'POST',
@@ -91,8 +86,7 @@ export default function Home() {
         setReading(data.reading);
         setCurrentStep(5); // Show the final reading
     };
-
-     
+ 
     const startShuffling = () => {
         setIsShuffling(true);
         shuffleIntervalRef.current = setInterval(() => {
@@ -106,9 +100,25 @@ export default function Home() {
         setIsShuffling(false);
         setCurrentStep(3); // Move to allow cutting the deck
     };
+    const selectReadingType = (type) => {
+        setSelectedReadingType(type);
+        if (type.type === 'Love Spread' || type.type === 'Career Spread') {
+            setCurrentStep(2); // Move to select specific spread
+        } else {
+            setCurrentStep(3); // For other types, skip to shuffling/cutting
+        }
+    };
     
-     
-    
+
+    const selectLoveSpread = (spread) => {
+        setSelectedLoveSpread(spread);
+        setCurrentStep(3); // Move to shuffling/cutting after selecting specific spread
+    };
+    const selectCareerSpread = (spread) => {
+        setSelectedCareerSpread(spread);
+        setCurrentStep(3); // Move to shuffling/cutting after selecting specific spread
+    };
+
     return (
         <div className={styles.container}>
             <Head>
@@ -117,76 +127,18 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main className={styles.main}>
-                <h1 className={styles.title}>Tarot AI - Discover Your Future</h1>
-                {currentStep === 1 && (
-                    <div className={styles.buttonContainer}>
-                        {['Three-Card Spread', 'Celtic Cross Spread', 'One-Card Daily', 'Love Spread', 'Career Spread'].map(type => (
-                            <button key={type} className={styles.readingTypeButton} onClick={() => selectReadingType({ type, maxCards: type === 'One-Card Daily' ? 1 : type === 'Three-Card Spread' ? 3 : type === 'Celtic Cross Spread' ? 10 : 6 })}>
-                                {type}
-                            </button>
-                        ))}
-                    </div>
-                )}
-
-{currentStep === 2 && (
-    <>
-        {!isShuffling && (
-            <div>
-               <div className={styles.cardStackContainer}>
-    {Array.from({ length: 5 }).map((_, idx) => (
-        <div key={idx} className={styles.stackedCard} style={{ transform: `translateX(${idx * -10}px)` }}>
-            <img src="/cards/card-back.webp" alt="Card Back" className={styles.stackedCardImage} />
-        </div>
-    ))}
-</div>
-
-                <button className={styles.shuffleButton} onClick={startShuffling}>Shuffle and Cut</button>
-            </div>
-        )}
-
-        {isShuffling && (
-            <div className={styles.shufflingContainer}>
-                <div className={styles.cardContainer}>
-                    {Array.from({ length: 6 }).map((_, idx) => (
-                        <div key={idx} className={`${styles.card} ${styles.shufflingEffect}`}>
-                            <img src="/cards/card-back.webp" alt="Card Back" className={styles.cardImage} />
-                        </div>
-                    ))}
-                </div>
-                <div className={styles.activityIndicator}>Shuffling...</div>
-                <button onClick={stopShuffling} className={styles.stopShufflingButton}>
-                    Stop Shuffling
-                </button>
-            </div>
-        )}
-    </>
-)}
-
-{currentStep === 3 && displayCutUI()}
-              
-                {currentStep === 4 && deck.slice(0, selectedReadingType.maxCards).map((card, index) => (
-                    <div key={index} onClick={() => selectCard(card)} className={styles.card}>
-                        <img src={card.image} alt={card.name} className={styles.cardImage} />
-                    </div>
-                ))}
-{selectedCards.length === selectedReadingType.maxCards && (
-    <button onClick={getReading} className={styles.readingButton}>
-        Reveal Your Reading
-    </button>
-)}
-
-{currentStep === 5 && (
-    <div>
-        <h2>Your Reading</h2>
-        <p>{reading}</p>
-        <button onClick={reset} className={styles.resetButton}>Start Over</button>
-    </div>
-)}
+    <h1 className={styles.title}>Tarot AI - Discover Your Future</h1>
+    {currentStep === 1 && <ReadingTypeSelection onTypeSelect={selectReadingType} />}
+    {(currentStep === 2 && selectedReadingType.type === 'Love Spread') && <LoveReadingSelection onSelectLoveSpread={selectLoveSpread} />}
+    {(currentStep === 2 && selectedReadingType.type === 'Career Spread') && <CareerReadingSelection onSelectCareerSpread={selectCareerSpread} />}
+    {currentStep === 3 && <ShuffleAndCut {...{ isShuffling, startShuffling, stopShuffling, displayCutUI }} />}
+    {currentStep === 4 && <CardSelection {...{ deck, maxCards: selectedLoveSpread ? selectedLoveSpread.maxCards : selectedReadingType.maxCards, onCardSelect: selectCard }} />}
+    {currentStep === 5 && <ReadingDisplay reading={reading} onReset={reset} />}
 </main>
-</div>
-);
-}
 
+        </div>
+    );
+}
 
 const tarotDeck = [
     { name: "The Fool", image: "/cards/the-fool.webp", description: "Beginnings, innocence, spontaneity, a free spirit" },
