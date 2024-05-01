@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { CareerReadingSelection , ReadingTypeSelection, LoveReadingSelection, CardSelection, ShuffleAndCut, ReadingDisplay } from '../components/homeComponents';
+import { CareerReadingSelection , ReadingTypeSelection, LoveReadingSelection, CardSelection, ShuffleAndCut, ReadingDisplay, ThreeCardReadingSelection } from '../components/homeComponents';
 import styles from '../styles/Home.module.css';
 import Head from 'next/head';
 

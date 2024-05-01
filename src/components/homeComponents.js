@@ -87,6 +87,31 @@ export function LoveReadingSelection({ onSelectLoveSpread }) {
       </div>
     );
   }
+
+  export function ThreeCardReadingSelection({ onSelectThreeCardSpread }) {
+    const threeCardSpreads = [
+        { name: 'Linear 3 Card Tarot Spreads', description: 'These spreads suggest a sequence or a linear path, which can be great for understanding progression or cause and effect. Choose from various layouts such as Past, Present, Future; You, Your Path, Your Potential; You, Relationship, Partner; Situation, Action, Outcome; and Idea, Process, Aspiration.', maxCards: 3 },
+        { name: 'Balanced 3 Card Tarot Spreads', description: 'You, Your Path, Your Potential. Focuses on personal development and future possibilities.', maxCards: 3 },
+      { name: 'Foundational 3 Card Tarot Spreads', description: 'Analyzes the dynamics within a relationship from personal to relational context.', maxCards: 3 },
+      { name: 'Crossed 3 Card Tarot Spreads', description: 'Looks at a specific situation, the action taken, and the potential results.', maxCards: 3 },
+    ];
+  
+    return (
+      <div className={styles.spreadSelectionContainer}>
+        <p>These spreads suggest a sequence or a linear path, which can be great for understanding progression or cause and effect.</p>
+        {threeCardSpreads.map((spread) => (
+          <div key={spread.name} className={styles.spreadOption}>
+            <h3>{spread.name}</h3>
+            <p>{spread.description}</p>
+            <button className={styles.selectSpreadButton} onClick={() => onSelectThreeCardSpread(spread)}>
+              Select This Spread
+            </button>
+          </div>
+        ))}
+      </div>
+    );
+  }
+  
 export function ShuffleAndCutr({ isShuffling, startShuffling, stopShuffling, displayCutUI }) {
     return (
       <>
