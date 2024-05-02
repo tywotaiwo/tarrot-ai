@@ -26,40 +26,44 @@ export default function Home() {
         // User decides the cut point by clicking a button or dragging a slider
         const newDeck = [...deck.slice(index), ...deck.slice(0, index)];
         setDeck(newDeck);
-        setCurrentStep(4); // Proceed to card selection
+        setCurrentStep(5); // Proceed to card selection
     };
 
     const shuffleDeck = () => {
         setIsShuffling(true);
-        const shuffleTimes = 5; // Shuffle the deck 5 times for better randomness
-        let count = 0;
-        shuffleIntervalRef.current = setInterval(() => {
-            if (count < shuffleTimes) {
-                const shuffledDeck = [...deck].sort(() => Math.random() - 0.5);
-                setDeck(shuffledDeck);
-                count++;
-            } else {
-                clearInterval(shuffleIntervalRef.current);
-                setIsShuffling(false);
-                setCurrentStep(3); // Move to allow cutting the deck
-            }
-        }, 150);
+        let shuffledDeck = [...deck]; // Copy the current deck to avoid mutating state directly
+        const shuffleTimes = 5; // Number of times to shuffle
+        for (let i = 0; i < shuffleTimes; i++) {
+            shuffledDeck.sort(() => Math.random() - 0.5);
+        }
+        setDeck(shuffledDeck); // Set the shuffled deck
+        setIsShuffling(false);
+      //  setCurrentStep(3);
     };
-    
+   
     const displayCutUI = () => {
-        // Enhanced UI for cutting the deck
         return (
             <div className={styles.cutContainer}>
                 <p>Please cut the deck:</p>
-                <input type="range" min="1" max={deck.length} defaultValue={Math.floor(deck.length / 2)}
+                <input 
+                    type="range" 
+                    min="1" 
+                    max={deck.length} 
+                    defaultValue={Math.floor(deck.length / 2)}
                     className={styles.cutSlider}
-                    onChange={(e) => handleCut(parseInt(e.target.value))} />
-                <button className={styles.cutButton} onClick={() => handleCut(Math.floor(deck.length / 2))}>
+                    onMouseUp={(e) => handleCut(parseInt(e.target.value))} // Changes here
+                    onTouchEnd={(e) => handleCut(parseInt(e.target.value))} // And here
+                />
+                <button 
+                    className={styles.cutButton} 
+                    onClick={() => handleCut(Math.floor(deck.length / 2))}
+                >
                     Cut Here
                 </button>
             </div>
         );
     };
+    
     
     const selectCard = (card) => {
         if (!selectedCards.includes(card) && selectedCards.length < selectedReadingType.maxCards) {
@@ -100,7 +104,8 @@ export default function Home() {
                 setCurrentStep(1); // Go back to reading type selection from category selection
                 break;
             case 4:
-                if (selectedReadingType.type === 'Three Card Spread' || selectedReadingType.type === 'Love Spread' || selectedReadingType.type === 'Career Spread') {
+                if (selectedReadingType.type === 'Three Card Spread' || selectedReadingType.type === 'Love Spread' || selectedReadingType.type === 'One-Card Daily'  ||  selectedReadingType.type === 'Career Spread' || selectedReadingType.type === 'Celtic Cross Spread') {
+                    shuffleDeck()
                     setCurrentStep(3); // Go back to spread selection from shuffling
                 } else {
                     setCurrentStep(2); // Go back to category selection for other types
@@ -118,17 +123,14 @@ export default function Home() {
     };
     const startShuffling = () => {
         setIsShuffling(true);
-        shuffleIntervalRef.current = setInterval(() => {
-            const shuffledDeck = [...deck].sort(() => Math.random() - 0.5);
-            setDeck(shuffledDeck);
-        }, 150);
-    };
-    
-    const stopShuffling = () => {
-        clearInterval(shuffleIntervalRef.current);
+        // Shuffling starts here, animation or timer based logic can be added
+      };
+      
+      const stopShuffling = () => {
         setIsShuffling(false);
-        setCurrentStep(3); // Move to allow cutting the deck
-    };
+        // Proceed to display cutting UI or directly to drawing cards if not required
+      };
+      
    
     const selectReadingType = (type) => {
         console.log("reading type", type)
@@ -145,7 +147,7 @@ export default function Home() {
     const drawDailyCard = () => {
         // Logic to randomly select a card and display it
         console.log("Drawing daily card...");
-        setCurrentStep(5); // Assuming step 5 displays the card
+        setCurrentStep(4); // Assuming step 5 displays the card
     };
     
     const selectCategory = (category) => {
@@ -156,12 +158,12 @@ export default function Home() {
     
     const selectLoveSpread = (spread) => {
         setSelectedLoveSpread(spread);
-        setCurrentStep(2); // Move to shuffling/cutting after selecting specific spread
+        setCurrentStep(4); // Move to shuffling/cutting after selecting specific spread
     };
 
     const selectCareerSpread = (spread) => {
         setSelectedCareerSpread(spread);
-        setCurrentStep(3); // Move to shuffling/cutting after selecting specific spread
+        setCurrentStep(4); // Move to shuffling/cutting after selecting specific spread
     };
 
     const selectCelticSpread = (spread) => {
@@ -172,7 +174,7 @@ export default function Home() {
     };
     const selectThreeCardSpread = (spread) => {
         setSelectedThreeCardSpread(spread);
-        setCurrentStep(3); // Move to shuffling/cutting after selecting specific spread
+        setCurrentStep(4); // Move to shuffling/cutting after selecting specific spread
     };
 
     return (
@@ -205,7 +207,7 @@ export default function Home() {
                 <CelticCrossReadingSelection onSelectCelticSpread={selectCelticSpread} />
             )}
 
-                {currentStep === 4 && <ShuffleAndCut isShuffling={isShuffling} startShuffling={startShuffling} stopShuffling={stopShuffling} displayCutUI={displayCutUI} />}
+                {currentStep === 4 && <ShuffleAndCut isShuffling={isShuffling} startShuffling={startShuffling} stopShuffling={stopShuffling} displayCutUI={displayCutUI} deck={deck} />}
                 {currentStep === 5 && <CardSelection deck={deck} maxCards={selectedThreeCardSpread ? selectedThreeCardSpread.maxCards : selectedReadingType.maxCards} onCardSelect={selectCard} />}
                 {currentStep === 6 && <ReadingDisplay reading={reading} onReset={reset} />}
             </main>

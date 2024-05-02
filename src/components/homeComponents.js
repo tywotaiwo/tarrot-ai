@@ -1,3 +1,4 @@
+import React, { useState, useRef, useEffect } from 'react';
 import styles from '../styles/Home.module.css';
 
 export function ReadingTypeSelection({ onTypeSelect }) {
@@ -223,74 +224,61 @@ export function LoveReadingSelection({ onSelectLoveSpread }) {
     );
   }
 
-  
-export function ShuffleAndCutr({ isShuffling, startShuffling, stopShuffling, displayCutUI }) {
+
+  export function ShuffleAndCut({ isShuffling, startShuffling, stopShuffling, displayCutUI, deck }) {
     return (
-      <>
-        {!isShuffling && (
-          <div className={styles.cardStackContainer}>
-            {Array.from({ length: 5 }).map((_, idx) => (
-              <div key={idx} className={styles.stackedCard} style={{ transform: `translateX(${idx * -10}px)` }}>
-                <img src="/cards/card-back.webp" alt="Card Back" className={styles.stackedCardImage} />
-              </div>
-            ))}
-            <button className={styles.shuffleButton} onClick={startShuffling}>Shuffle and Cut</button>
-          </div>
-        )}
-  
-        {isShuffling && (
-          <div className={styles.shufflingContainer}>
-            <div className={styles.cardContainer}>
-              {Array.from({ length: 6 }).map((_, idx) => (
-                <div key={idx} className={`${styles.card} ${styles.shufflingEffect}`}>
-                  <img src="/cards/card-back.webp" alt="Card Back" className={styles.cardImage} />
-                </div>
-              ))}
-            </div>
-            <div className={styles.activityIndicator}>Shuffling...</div>
-            <button onClick={stopShuffling} className={styles.stopShufflingButton}>
-              Stop Shuffling
-            </button>
-          </div>
-        )}
-      </>
+        <div className={styles.shuffleContainer}>
+            {isShuffling ? (
+                <>
+                    <div className={styles.cardShuffleAnimation}>
+                        {deck.map((card, index) => (
+                            <div key={index} className={styles.cardAnimation}>
+                                <img src={card.image} alt={card.name} />
+                            </div>
+                        ))}
+                    </div>
+                    <button onClick={stopShuffling} className={`${styles.shuffleButton} ${styles.stopShufflingButton}`}>
+                        Stop Shuffling
+                    </button>
+                </>
+            ) : (
+                <>
+                    {!deck.length ? (
+                        <button onClick={startShuffling} className={styles.shuffleButton}>
+                            Shuffle Cards
+                        </button>
+                    ) : displayCutUI()}
+                </>
+            )}
+        </div>
     );
-  }
-  export function ShuffleAndCut({ isShuffling, startShuffling, stopShuffling, displayCutUI }) {
-    return (
-      <>
-      {!isShuffling && (
+}
+
+  
+  // In your main component, control these actions based on the selected reading type
+  const startShuffling = () => {
+      setIsShuffling(true);
+      // simulate shuffling logic here
+      setTimeout(() => {
+        setIsShuffling(false);
+        setCurrentStep(currentStep + 1); // Proceed to cut or draw
+      }, 3000); // Simulate 3 seconds of shuffling
+  };
+  
+  const displayCutUI = () => {
+      // Allow the user to cut the deck if not a simple one-card draw
+      if (selectedReadingType.type !== 'One-Card Daily') {
+        return (
           <div>
-             <div className={styles.cardStackContainer}>
-  {Array.from({ length: 5 }).map((_, idx) => (
-      <div key={idx} className={styles.stackedCard} style={{ transform: `translateX(${idx * -10}px)` }}>
-          <img src="/cards/card-back.webp" alt="Card Back" className={styles.stackedCardImage} />
-      </div>
-  ))}
-  </div>
-  
-              <button className={styles.shuffleButton} onClick={startShuffling}>Shuffle and Cut</button>
+            <p>Please cut the deck:</p>
+            <button onClick={() => setCurrentStep(currentStep + 1)}>Cut Here</button>
           </div>
-      )}
+        );
+      }
+  };
   
-      {isShuffling && (
-          <div className={styles.shufflingContainer}>
-              <div className={styles.cardContainer}>
-                  {Array.from({ length: 6 }).map((_, idx) => (
-                      <div key={idx} className={`${styles.card} ${styles.shufflingEffect}`}>
-                          <img src="/cards/card-back.webp" alt="Card Back" className={styles.cardImage} />
-                      </div>
-                  ))}
-              </div>
-              <div className={styles.activityIndicator}>Shuffling...</div>
-              <button onClick={stopShuffling} className={styles.stopShufflingButton}>
-                  Stop Shuffling
-              </button>
-          </div>
-      )}
-  </>
-    );
-  }
+  // Adjust these steps based on user input or the selected type of reading.
+  
   
 
 export function CardSelection({ deck, maxCards, onCardSelect }) {
