@@ -150,29 +150,56 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
+/* Base styles */
 .buttonContainer {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 10px; /* Space between buttons */
+    gap: 10px;
     margin-top: 20px;
 }
 
-.readingTypeButton {
-    background-color: #6441a5; /* Deep purple background */
-    color: #fff; /* White text */
+.readingTypeButton, .selectSpreadButton {
+    background-color: #6441a5;
+    color: #fff;
     border: none;
     padding: 10px 20px;
     font-size: 16px;
-    border-radius: 8px; /* Rounded corners */
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s; /* Smooth transition for hover effects */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Subtle shadow for 3D effect */
+    transition: background-color 0.3s, transform 0.3s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.readingTypeButton:hover {
-    background-color: #7a6fb1; /* Lighter purple on hover */
-    transform: scale(1.05); /* Slightly enlarge button on hover */
+.readingTypeButton:hover, .selectSpreadButton:hover {
+    background-color: #7a6fb1;
+    transform: scale(1.05);
 }
+
+@media (max-width: 768px) {
+    .readingTypeButton, .selectSpreadButton {
+        padding: 12px 18px; /* Slightly larger padding for better touch */
+        font-size: 14px; /* Slightly smaller font size for better fit */
+    }
+
+    .buttonContainer {
+        gap: 8px; /* Smaller gap */
+    }
+}
+
+@media (max-width: 480px) {
+    .readingTypeButton, .selectSpreadButton {
+        width: 100%; /* Full width buttons for easier access on small screens */
+        padding: 15px; /* Larger padding for easier touch */
+        margin: 5px 0; /* Adjust margin for better spacing */
+        font-size: 16px; /* Increase font size for readability */
+    }
+
+    .buttonContainer {
+        flex-direction: column; /* Stack buttons vertically */
+    }
+}
+
 
 .readingTypeButton:active {
     transform: scale(0.95); /* Slightly shrink button when clicked */
@@ -284,41 +311,176 @@
 }
 
 
-/* love reading section */
+/* Container for all spread options */
 .spreadSelectionContainer {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     padding: 20px;
-    gap: 20px;
+    gap: 30px; /* Increase gap for better spacing */
+    background-color: #e8eaf6; /* Soft background color for the entire container */
+}
+/* Optional: Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .spreadSelectionContainer h2 {
+        font-size: 20px; /* Slightly smaller font on mobile devices */
+        margin-bottom: 20px; /* Less margin on smaller screens */
+    }
 }
 
+/* Individual spread options */
 .spreadOption {
-    background: #f4f4f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    background: #ffffff; /* Brighter background for each option */
+    border: 1px solid #ccc; /* Subtle border */
+    border-radius: 12px; /* More rounded corners for a modern look */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow for depth */
+    padding: 25px; /* More padding for better spacing */
+    width: 280px; /* Slightly narrower for better fit on mobile */
+    min-height: 220px; /* Increased height for more content */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s, box-shadow 0.3s; /* Transition for interaction */
+}
+
+.spreadOption:hover {
+    transform: translateY(-5px); /* Subtle lift effect on hover */
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25); /* Enhanced shadow on hover */
+}
+
+/* Titles within each spread option */
+.spreadOption h3 {
+    color: #5c6bc0; /* Slightly darker color for better readability */
+    font-size: 20px; /* Larger font size for titles */
+    margin-bottom: 15px; /* More space below the title */
+}
+
+/* Descriptions within each spread option */
+.spreadOption p {
+    font-size: 16px; /* Larger font size for readability */
+    color: #666; /* Soften the text color */
+    line-height: 1.5; /* Improved line height for readability */
+}
+
+/* Buttons to select each spread */
+.selectSpreadButton {
+    background-color: #673ab7; /* Deeper purple for more contrast */
+    color: #fff;
+    border: none;
+    padding: 12px 20px; /* Larger padding for easier interaction */
+    cursor: pointer;
+    border-radius: 8px; /* Soften the edges */
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.3s; /* Smooth transition for hover effects */
+}
+
+.selectSpreadButton:hover {
+    background-color: #7e57c2; /* Lighter purple on hover */
+    transform: scale(1.05); /* Slightly grow the button */
+}
+.categoryHeader {
+    text-align: center; /* Center the text */
+    padding: 20px; /* Provides padding around the text */
+    background-color: #e6e0f8; /* A lighter, more subtle background color */
+    color: #5c6bc0; /* Ensuring the text color complements the background */
+    border-radius: 10px; /* Rounded corners for a smoother look */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* A lighter shadow for subtlety */
+    margin: 20px auto; /* Centers the header and adds spacing */
+    max-width: 80%; /* Restricts the maximum width for better presentation */
+}
+
+
+.categoryHeader h2 {
+    color: #673ab7; /* A rich purple that matches the button colors */
+    font-size: 24px; /* Larger font size for importance */
+    margin-bottom: 5px; /* Small gap below the header to the description */
+    font-weight: bold; /* Makes the font bold */
+    text-transform: uppercase; /* Uppercase letters for a consistent design theme */
+}
+
+.categoryHeader p {
+    color: #666; /* Soft gray for the text, making it less intense than the header */
+    font-size: 16px; /* Smaller font size for the description */
+    margin-top: 0; /* Removes the top margin for tight spacing */
+    line-height: 1.6; /* Increased line height for readability */
+    max-width: 80%;  /* Limits the width to enhance readability */
+    margin-left: auto; /* Centers the paragraph if it's less than max width */
+    margin-right: auto;
+}
+
+
+/*One card daily home*/
+.oneCardDailyContainer {
+    text-align: center;
     padding: 20px;
-    width: 300px;
+    background-color: #f8f0ff; /* Light and fresh background for a new day */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    margin: 20px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.oneCardDailyContainer h2 {
+    color: #8854d0;
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.oneCardDailyContainer p {
+    font-size: 16px;
+    color: #6c757d;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.oneCardDailyContainer .selectSpreadButton {
+    padding: 15px 30px;
+    font-size: 18px;
+    background-color: #4a69bd;
+    color: white;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+.oneCardDailyContainer .selectSpreadButton:hover {
+    background-color: #1e3799;
+}
+
+
+/* three card category selection*/
+/* Base styles for category options */
+.categoryOption {
+    background: #f4f4f9; /* Light background for better readability */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+    padding: 20px;
+    margin: 10px;
+    width: calc(50% - 20px); /* Adjust width for two-column layout */
     min-height: 200px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    text-align: center; /* Center-align text for better appearance */
 }
 
-.spreadOption h3 {
-    color: #333;
-    font-size: 18px;
-    margin-bottom: 10px;
+.categoryOption h3 {
+    color: #333; /* Dark color for heading */
+    font-size: 1.5rem; /* Larger font size for heading */
+    margin-bottom: 10px; /* Space below heading */
 }
 
-.spreadOption p {
-    font-size: 14px;
-    color: #666;
-    flex-grow: 1;
+.categoryOption p {
+    font-size: 1rem; /* Appropriate font size for description */
+    color: #666; /* Grey color for text */
+    flex-grow: 1; /* Grow to use available space */
 }
 
-.selectSpreadButton {
-    background-color: #6441a5;
+/* Enhance the buttons within category options */
+.categoryOption button {
+    background-color: #6441a5; /* Deep purple background */
     color: white;
     border: none;
     padding: 10px 15px;
@@ -329,6 +491,44 @@
     transition: background-color 0.3s;
 }
 
-.selectSpreadButton:hover {
-    background-color: #7a6fb1;
+.categoryOption button:hover {
+    background-color: #7a6fb1; /* Lighter purple on hover */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .categoryOption {
+        width: 100%; /* Full width for smaller devices */
+    }
+}
+
+@media (max-width: 480px) {
+    .categoryOption {
+        padding: 15px; /* Adjust padding on smaller screens */
+        margin: 5px; /* Reduce margin for tighter spaces */
+    }
+}
+
+/*back button*/
+.backButton {
+    margin: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #f44336; /* A vivid color for visibility */
+    color: #fff; /* White text for contrast */
+    border: none;
+    border-radius: 8px; /* Soft rounded edges */
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+.backButton:hover {
+    background-color: #d32f2f; /* Darker shade on hover for tactile feedback */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+}
+
+.backButton:active {
+    transform: translateY(2px); /* Slight push effect on click */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Flatter shadow on press */
 }

@@ -1,6 +1,41 @@
 import styles from '../styles/Home.module.css';
 
-export function ThreeCardReadingSelection({ category, onSelectSpread }) {
+export function ReadingTypeSelection({ onTypeSelect }) {
+  const readingTypes = [
+    { type: 'Three Card Spread', maxCards: 3 },
+    { type: 'Celtic Cross Spread', maxCards: 10 },
+    { type: 'One-Card Daily', maxCards: 1 },
+    { type: 'Love Spread', maxCards: 6 },
+    { type: 'Career Spread', maxCards: 6 }
+  ];
+
+  return (
+    <div className={styles.buttonContainer}>
+      {readingTypes.map((type) => (
+        <button key={type.type} className={styles.readingTypeButton} onClick={() => onTypeSelect(type)}>
+          {type.type}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+export function OneCardDailyReadingSelection({ onSelectDailyCard }) {
+  return (
+    <div className={styles.oneCardDailyContainer}>
+      <div className={styles.categoryHeader}>
+        <h2>One-Card Daily Tarot</h2>
+        <p>Draw a single card for a quick snapshot of your day. What does the universe want you to know today?</p>
+      </div>
+      <button className={styles.selectSpreadButton} onClick={onSelectDailyCard}>
+        Draw Today's Card
+      </button>
+    </div>
+  );
+}
+
+export function ThreeCardReadingSelection({ category, description, onSelectSpread }) {
+
     const threeCardSpreads = {
         'Linear': [
             { name: 'Past, Present, Future', description: 'Evaluates the flow of time or progression through situations.' },
@@ -32,66 +67,78 @@ export function ThreeCardReadingSelection({ category, onSelectSpread }) {
     };
 
     const spreadsToShow = threeCardSpreads[category] || [];
+    const categoryInfo = threeCardSpreads[category] || { spreads: [], description: "No description available." };
 
     return (
-        <div className={styles.spreadSelectionContainer}>
-            <h2>{category} 3 Card Tarot Spreads</h2>
-            {spreadsToShow.map(spread => (
-                <div key={spread.name} className={styles.spreadOption}>
-                    <h3>{spread.name}</h3>
-                    <p>{spread.description}</p>
-                    <button className={styles.selectSpreadButton} onClick={() => onSelectSpread(spread)}>
-                        Select This Spread
-                    </button>
-                </div>
-            ))}
-        </div>
-    );
-}
-
-export function CategorySelection({ onSelectCategory }) {
-    const categories = [
-        { name: 'Linear', description: 'Understand linear progressions like past, present, and future.' },
-        { name: 'Balanced', description: 'Explore balanced aspects such as mind, body, and spirit.' },
-        { name: 'Foundational', description: 'Get foundational advice based on different scenarios.' },
-        { name: 'Crossed', description: 'Resolve conflicts with spreads that identify challenges and provide solutions.' }
-    ];
-
-    return (
-        <div className={styles.buttonContainer}>
-            {categories.map(category => (
-                <div key={category.name} className={styles.categoryOption}>
-                    <h3>{category.name}</h3>
-                    <p>{category.description}</p>
-                    <button className={styles.readingTypeButton} onClick={() => onSelectCategory(category.name)}>
-                        Select {category.name}
-                    </button>
-                </div>
-            ))}
-        </div>
-    );
-}
-
-export function ReadingTypeSelection({ onTypeSelect }) {
-  const readingTypes = [
-    { type: 'Three Card Spread', maxCards: 3 },
-    { type: 'Celtic Cross Spread', maxCards: 10 },
-    { type: 'One-Card Daily', maxCards: 1 },
-    { type: 'Love Spread', maxCards: 6 },
-    { type: 'Career Spread', maxCards: 6 }
-  ];
-
-  return (
-    <div className={styles.buttonContainer}>
-      {readingTypes.map((type) => (
-        <button key={type.type} className={styles.readingTypeButton} onClick={() => onTypeSelect(type)}>
-          {type.type}
-        </button>
-      ))}
-    </div>
+      
+      <div >
+               <div className={styles.categoryHeader}>
+                <h2>{category} 3 Card Tarot Spreads</h2>
+                <p>{description}</p>
+            </div>
+      <div className={styles.spreadSelectionContainer}>
+          {spreadsToShow.map(spread => (
+              <div key={spread.name} className={styles.spreadOption}>
+                  <h3>{spread.name}</h3>
+                  <p>{spread.description}</p>
+                  <button className={styles.selectSpreadButton} onClick={() => onSelectSpread(spread)}>
+                      Select This Spread
+                  </button>
+              </div>
+          ))}
+      </div></div>
   );
 }
 
+export function CategorySelection({ onSelectCategory }) {
+  const categories = [
+      { name: 'Linear', description: 'Understand linear progressions like past, present, and future.' },
+      { name: 'Balanced', description: 'Explore balanced aspects such as mind, body, and spirit.' },
+      { name: 'Foundational', description: 'Get foundational advice based on different scenarios.' },
+      { name: 'Crossed', description: 'Resolve conflicts with spreads that identify challenges and provide solutions.' }
+  ];
+
+  return (
+      <div className={styles.buttonContainer}>
+          {categories.map(category => (
+              <div key={category.name} className={styles.categoryOption}>
+                  <h3>{category.name}</h3>
+                  <p>{category.description}</p>
+                  <button className={styles.readingTypeButton} onClick={() => onSelectCategory(category)}>
+                      Select {category.name}
+                  </button>
+              </div>
+          ))}
+      </div>
+  );
+}
+
+export function CelticCrossReadingSelection({ onSelectCelticSpread }) {
+  const celticSpreads = [
+    { name: 'Traditional Celtic Cross', description: 'The classic 10-card spread that covers a broad range of questions, focusing on past influences, current situations, and future possibilities.' },
+    { name: 'Love Focus Celtic Cross', description: 'A variation of the traditional spread, tailored to provide insight into romantic relationships, revealing dynamics and future directions.' },
+    { name: 'Career Focus Celtic Cross', description: 'Adapts the traditional layout to focus on career questions, helping to clarify your career trajectory and upcoming opportunities.' }
+  ];
+
+  return (
+    <div><div className={styles.categoryHeader}>
+    <h2>Celtic Cross Tarot Spreads</h2>
+    <p>Explore different aspects of your life with the detailed Celtic Cross tarot spread. Choose a variation best suited to your question.</p>
+  </div>
+    <div className={styles.spreadSelectionContainer}>
+      
+      {celticSpreads.map((spread) => (
+        <div key={spread.name} className={styles.spreadOption}>
+          <h3>{spread.name}</h3>
+          <p>{spread.description}</p>
+          <button className={styles.selectSpreadButton} onClick={() => onSelectCelticSpread(spread)}>
+            Select This Spread
+          </button>
+        </div>
+      ))}
+    </div>    </div>
+  );
+}
 
 export function LoveReadingSelection({ onSelectLoveSpread }) {
     const loveSpreads = [
@@ -114,8 +161,16 @@ export function LoveReadingSelection({ onSelectLoveSpread }) {
     ];
   
     return (
-      <div className={styles.spreadSelectionContainer}>
-        <p>These spreads are designed to address various aspects of love—whether it's reflecting on an existing relationship, healing from past issues, seeking new love, or fostering self-love. Each spread uses a specific card arrangement to enhance the focus and intention of the reading.</p>
+      <div> <div className={styles.categoryHeader}>
+      <h2>Love Spreads</h2>
+      <p>These spreads are designed to address various aspects of love—whether it's reflecting on an existing relationship, healing from past issues, seeking new love, or fostering self-love. Each spread uses a specific card arrangement to enhance the focus and intention of the reading.
+
+      </p>
+
+  </div>
+  
+  <div className={styles.spreadSelectionContainer}>
+        
         {loveSpreads.map((spread) => (
           <div key={spread.name} className={styles.spreadOption}>
             <h3>{spread.name}</h3>
@@ -126,6 +181,7 @@ export function LoveReadingSelection({ onSelectLoveSpread }) {
           </div>
         ))}
       </div>
+  </div>
     );
   }
   export function CareerReadingSelection({ onSelectCareerSpread }) {
@@ -145,8 +201,15 @@ export function LoveReadingSelection({ onSelectLoveSpread }) {
     ];
   
     return (
+      <div> <div className={styles.categoryHeader}>
+      <h2>Career Spreads</h2>
+      <p>
+      These spreads are designed to provide insight and guidance on various aspects of your career—whether it's planning your career path, preparing for job interviews, making career decisions, or achieving success at work. Each spread uses a specific card arrangement to address different facets of your career journey.
+      </p>
+
+  </div>
       <div className={styles.spreadSelectionContainer}>
-        <p>These spreads are designed to provide insight and guidance on various aspects of your career—whether it's planning your career path, preparing for job interviews, making career decisions, or achieving success at work. Each spread uses a specific card arrangement to address different facets of your career journey.</p>
+   
         {careerSpreads.map((spread) => (
           <div key={spread.name} className={styles.spreadOption}>
             <h3>{spread.name}</h3>
@@ -156,7 +219,7 @@ export function LoveReadingSelection({ onSelectLoveSpread }) {
             </button>
           </div>
         ))}
-      </div>
+      </div>     </div>
     );
   }
 

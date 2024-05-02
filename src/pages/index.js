@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { CareerReadingSelection , ReadingTypeSelection, LoveReadingSelection, CardSelection, ShuffleAndCut, ReadingDisplay, ThreeCardReadingSelection, CategorySelection } from '../components/homeComponents';
+import { CareerReadingSelection , ReadingTypeSelection, LoveReadingSelection, CardSelection, ShuffleAndCut, ReadingDisplay, CelticCrossReadingSelection, OneCardDailyReadingSelection, ThreeCardReadingSelection, CategorySelection } from '../components/homeComponents';
 import styles from '../styles/Home.module.css';
 import Head from 'next/head';
 
@@ -9,12 +9,15 @@ export default function Home() {
     const [selectedReadingType, setSelectedReadingType] = useState('');
     const [selectedLoveSpread, setSelectedLoveSpread] = useState(null);
     const [selectedCareerSpread, setSelectedCareerSpread] = useState(null);
+    
+    const [selectedCelticSpread, setSelectedCelticSpread] = useState(null);
     const [selectedThreeCardSpread, setSelectedThreeCardSpread] = useState(null);
     const [selectedCards, setSelectedCards] = useState([]);
     const [reading, setReading] = useState('');
     const [userQuestion, setUserQuestion] = useState('');
     const [isShuffling, setIsShuffling] = useState(false);
 
+    const [selectedCategoryDescription, setSelectedCategoryDescription] = useState('');
 
     const [selectedCategory, setSelectedCategory] = useState('');
 
@@ -128,19 +131,29 @@ export default function Home() {
     };
    
     const selectReadingType = (type) => {
+        console.log("reading type", type)
         setSelectedReadingType(type);
         if (type.type === 'Three Card Spread') {
             setCurrentStep(2); // Step to select category of three-card spread
-        } else if (['Love Spread', 'Career Spread'].includes(type.type)) {
+        } else if (['Love Spread', 'Career Spread', 'Celtic Cross Spread', 'One-Card Daily'].includes(type.type)) {
             setCurrentStep(3); // Go to selecting a specific spread
         } else {
             setCurrentStep(4); // Skip to shuffling/cutting
         }
     };
+    
+    const drawDailyCard = () => {
+        // Logic to randomly select a card and display it
+        console.log("Drawing daily card...");
+        setCurrentStep(5); // Assuming step 5 displays the card
+    };
+    
     const selectCategory = (category) => {
-        setSelectedCategory(category);
+        setSelectedCategory(category.name);
+        setSelectedCategoryDescription(category.description); // Assuming you add a state to store this
         setCurrentStep(3); // Move to select specific spread from the category
     };
+    
     const selectLoveSpread = (spread) => {
         setSelectedLoveSpread(spread);
         setCurrentStep(2); // Move to shuffling/cutting after selecting specific spread
@@ -151,6 +164,12 @@ export default function Home() {
         setCurrentStep(3); // Move to shuffling/cutting after selecting specific spread
     };
 
+    const selectCelticSpread = (spread) => {
+        // Implement selection logic, possibly setting state or navigating to a spread view
+        console.log("Selected Celtic Spread: ", spread);
+        setSelectedCelticSpread(spread)
+        setCurrentStep(4); // Move to card selection or display the spread
+    };
     const selectThreeCardSpread = (spread) => {
         setSelectedThreeCardSpread(spread);
         setCurrentStep(3); // Move to shuffling/cutting after selecting specific spread
@@ -171,9 +190,21 @@ export default function Home() {
                 )}
                 {currentStep === 1 && <ReadingTypeSelection onTypeSelect={selectReadingType} />}
                 {currentStep === 2 && selectedReadingType.type === 'Three Card Spread' && <CategorySelection onSelectCategory={selectCategory} />}
-                {currentStep === 3 && selectedCategory && <ThreeCardReadingSelection category={selectedCategory} onSelectSpread={selectThreeCardSpread} />}
+                {currentStep === 3 && selectedReadingType.type === 'One-Card Daily' && (
+                <OneCardDailyReadingSelection onSelectDailyCard={drawDailyCard} />
+            )}
                 {currentStep === 3 && selectedReadingType.type === 'Love Spread' && <LoveReadingSelection onSelectLoveSpread={selectLoveSpread} />}
+
+                {currentStep === 3 && selectedReadingType.type === 'Three Card Spread' && selectedCategory && (
+                <ThreeCardReadingSelection category={selectedCategory} description={selectedCategoryDescription} onSelectSpread={selectThreeCardSpread} />
+                )}
                 {currentStep === 3 && selectedReadingType.type === 'Career Spread' && <CareerReadingSelection onSelectCareerSpread={selectCareerSpread} />}
+
+
+                {currentStep === 3 && selectedReadingType.type === 'Celtic Cross Spread' && (
+                <CelticCrossReadingSelection onSelectCelticSpread={selectCelticSpread} />
+            )}
+
                 {currentStep === 4 && <ShuffleAndCut isShuffling={isShuffling} startShuffling={startShuffling} stopShuffling={stopShuffling} displayCutUI={displayCutUI} />}
                 {currentStep === 5 && <CardSelection deck={deck} maxCards={selectedThreeCardSpread ? selectedThreeCardSpread.maxCards : selectedReadingType.maxCards} onCardSelect={selectCard} />}
                 {currentStep === 6 && <ReadingDisplay reading={reading} onReset={reset} />}
