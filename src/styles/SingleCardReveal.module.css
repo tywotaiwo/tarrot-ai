@@ -1,0 +1,57 @@
+/* src/styles/SingleCardReveal.module.css */
+
+.cardContainer {
+    position: relative;
+    width: 160px;  /* This should match the actual card size */
+    height: 240px; /* This should match the actual card size */
+    margin: 20px auto; /* Centering the card */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+}
+
+.cardImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image covers the card area */
+    border-radius: 10px; /* Rounded corners */
+}
+
+.revealButton {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #4A90E2; /* A soothing blue */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.revealButton:hover {
+    background-color: #357ABD; /* A darker shade of blue on hover */
+}
+
+.reset {
+    text-align: center;
+    margin-top: 20px; /* Space from the card image */
+}
+
+.resetButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background: linear-gradient(145deg, #FF5722, #E91E63); /* Gradient from orange to pink */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.resetButton:hover {
+    background: linear-gradient(145deg, #E91E63, #FF5722); /* Reverse gradient on hover */
+    transform: scale(1.05); /* Slightly enlarge button on hover */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}

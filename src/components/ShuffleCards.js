@@ -1,7 +1,7 @@
 import styles from '../styles/Shuffle.module.css';
 import React, { useState, useRef, useEffect } from 'react';
 
-export function ShuffleAndCut({ isShuffling, startShuffling, stopShuffling, displayCutUI, deck }) {
+export function ShuffleCards({ isShuffling, startShuffling, stopShuffling, displayCutUI, deck }) {
   const [hasStartedShuffling, setHasStartedShuffling] = useState(false);
 
   const handleStartShuffling = () => {
