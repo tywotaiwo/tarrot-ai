@@ -11,6 +11,8 @@
   "dependencies": {
     "@azure/ai-language-text": "^1.1.0",
     "@vercel/analytics": "^1.2.2",
+    "axios": "^1.6.8",
+    "firebase": "^10.11.1",
     "next": "14.2.1",
     "openai": "^4.33.1",
     "react": "^18",

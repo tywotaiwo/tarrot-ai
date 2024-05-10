@@ -1,15 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { CareerReadingSelection , ReadingTypeSelection, LoveReadingSelection, CardSelection, ShuffleAndCut, ReadingDisplay, CelticCrossReadingSelection, OneCardDailyReadingSelection, ThreeCardReadingSelection, CategorySelection } from '../components/homeComponents';
+import { CareerReadingSelection , ReadingTypeSelection, LoveReadingSelection, CardSelection, ReadingDisplay, CelticCrossReadingSelection, OneCardDailyReadingSelection, ThreeCardReadingSelection, CategorySelection, CutDeck } from '../components/homeComponents';
+import { ShuffleAndCut } from '../components/ShuffleAndCut';
 import styles from '../styles/Home.module.css';
 import Head from 'next/head';
 
+import Navbar from '../components/Navbar';
 export default function Home() {
     const [deck, setDeck] = useState(tarotDeck);
     const [currentStep, setCurrentStep] = useState(1);
     const [selectedReadingType, setSelectedReadingType] = useState('');
     const [selectedLoveSpread, setSelectedLoveSpread] = useState(null);
     const [selectedCareerSpread, setSelectedCareerSpread] = useState(null);
-    
+    const shuffleIntervalRef = useRef(null);
     const [selectedCelticSpread, setSelectedCelticSpread] = useState(null);
     const [selectedThreeCardSpread, setSelectedThreeCardSpread] = useState(null);
     const [selectedCards, setSelectedCards] = useState([]);
@@ -29,18 +31,6 @@ export default function Home() {
         setCurrentStep(5); // Proceed to card selection
     };
 
-    const shuffleDeck = () => {
-        setIsShuffling(true);
-        let shuffledDeck = [...deck]; // Copy the current deck to avoid mutating state directly
-        const shuffleTimes = 5; // Number of times to shuffle
-        for (let i = 0; i < shuffleTimes; i++) {
-            shuffledDeck.sort(() => Math.random() - 0.5);
-        }
-        setDeck(shuffledDeck); // Set the shuffled deck
-        setIsShuffling(false);
-      //  setCurrentStep(3);
-    };
-   
     const displayCutUI = () => {
         return (
             <div className={styles.cutContainer}>
@@ -121,16 +111,25 @@ export default function Home() {
                 setCurrentStep(1); // Default back step if unsure
         }
     };
+    const shuffleDeck = () => {
+        let shuffledDeck = [...deck]; // Copy the current deck to avoid mutating state directly
+        shuffledDeck.sort(() => Math.random() - 0.5);
+        setDeck(shuffledDeck); // Set the shuffled deck
+    };
+    
     const startShuffling = () => {
         setIsShuffling(true);
-        // Shuffling starts here, animation or timer based logic can be added
-      };
-      
-      const stopShuffling = () => {
+        // Start a continuous shuffle with a timer
+        shuffleIntervalRef.current = setInterval(() => {
+            shuffleDeck();
+        }, 5);
+    };
+    
+    const stopShuffling = () => {
+        clearInterval(shuffleIntervalRef.current); // Stop the continuous shuffling
         setIsShuffling(false);
-        // Proceed to display cutting UI or directly to drawing cards if not required
-      };
-      
+    };
+    
    
     const selectReadingType = (type) => {
         console.log("reading type", type)
@@ -180,12 +179,15 @@ export default function Home() {
     return (
         <div className={styles.container}>
             <Head>
+                
+        
                 <title>Tarot AI - Discover Your Future</title>
                
                 <meta name="description" content="Discover your future with Tarot AI" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main className={styles.main}>
+                
                 <h1 className={styles.title}>Tarot AI - Discover Your Future</h1>
                 {currentStep > 1 && (
                     <button onClick={goBack} className={styles.backButton}>Go Back</button>
@@ -208,6 +210,15 @@ export default function Home() {
             )}
 
                 {currentStep === 4 && <ShuffleAndCut isShuffling={isShuffling} startShuffling={startShuffling} stopShuffling={stopShuffling} displayCutUI={displayCutUI} deck={deck} />}
+               
+                {currentStep === 5 && selectedReadingType.type === 'Three Card Spread' && (
+  <CutDeck deck={deck} onCutsComplete={(selectedCards) => {
+    setSelectedCards(selectedCards);
+    setCurrentStep(5);  // Proceed to reveal cards or get reading button
+  }} />
+)}
+
+
                 {currentStep === 5 && <CardSelection deck={deck} maxCards={selectedThreeCardSpread ? selectedThreeCardSpread.maxCards : selectedReadingType.maxCards} onCardSelect={selectCard} />}
                 {currentStep === 6 && <ReadingDisplay reading={reading} onReset={reset} />}
             </main>

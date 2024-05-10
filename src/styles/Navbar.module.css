@@ -1,0 +1,58 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: #6441A5;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    z-index: 1000;
+}
+
+.menuIcon {
+    display: none; /* Hidden by default */
+    cursor: pointer;
+}
+
+.menu {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.show {
+    display: block;
+}
+
+.button {
+    margin-right: 10px;
+    background-color: #FFD700; /* Example button color */
+    color: black;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #f0c040;
+}
+
+@media (max-width: 768px) {
+    .menu {
+        display: none; /* Hide the menu initially on mobile */
+        flex-direction: column;
+        width: auto;
+    }
+
+    .menuIcon {
+        display: block; /* Show menu icon on mobile */
+    }
+
+    .show {
+        display: flex; /* Show menu when icon is clicked */
+    }
+}

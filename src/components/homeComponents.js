@@ -1,6 +1,51 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styles from '../styles/Home.module.css';
 
+export function CutDeck({ deck, onCutsComplete }) {
+  const [cuts, setCuts] = useState([]);
+  const [cutDecks, setCutDecks] = useState([]);
+
+  const handleCut = (index) => {
+    const newCuts = [...cuts, index];
+    setCuts(newCuts);
+    const firstCut = deck.slice(0, index);
+    const secondCut = deck.slice(index, 2 * index);
+    const thirdCut = deck.slice(2 * index);
+
+    if (newCuts.length === 1) {
+      setCutDecks([firstCut, secondCut, thirdCut]);
+    } else if (newCuts.length === 3) {
+      onCutsComplete([firstCut[0], secondCut[0], thirdCut[0]]);
+    }
+  };
+
+  return (
+    <div className={styles.cutContainer}>
+      <h2>Please make your cuts:</h2>
+      {cutDecks.length === 0 ? (
+        <input
+          type="range"
+          min="1"
+          max={deck.length}
+          defaultValue={Math.floor(deck.length / 3)}
+          className={styles.cutSlider}
+          onMouseUp={(e) => handleCut(parseInt(e.target.value))}
+          onTouchEnd={(e) => handleCut(parseInt(e.target.value))}
+        />
+      ) : (
+        cutDecks.map((pile, index) => (
+          <div key={index} className={styles.pile}>
+            <h3>Pile {index + 1}</h3>
+            <button onClick={() => handleCut(index)} className={styles.cutButton}>
+              Cut Here
+            </button>
+          </div>
+        ))
+      )}
+    </div>
+  );
+}
+
 export function ReadingTypeSelection({ onTypeSelect }) {
   const readingTypes = [
     { type: 'Three Card Spread', maxCards: 3 },
@@ -21,17 +66,26 @@ export function ReadingTypeSelection({ onTypeSelect }) {
   );
 }
 
-export function OneCardDailyReadingSelection({ onSelectDailyCard }) {
+export function CategorySelection({ onSelectCategory }) {
+  const categories = [
+      { name: 'Linear', description: 'Understand linear progressions like past, present, and future.' },
+      { name: 'Balanced', description: 'Explore balanced aspects such as mind, body, and spirit.' },
+      { name: 'Foundational', description: 'Get foundational advice based on different scenarios.' },
+      { name: 'Crossed', description: 'Resolve conflicts with spreads that identify challenges and provide solutions.' }
+  ];
+
   return (
-    <div className={styles.oneCardDailyContainer}>
-      <div className={styles.categoryHeader}>
-        <h2>One-Card Daily Tarot</h2>
-        <p>Draw a single card for a quick snapshot of your day. What does the universe want you to know today?</p>
+      <div className={styles.buttonContainer}>
+          {categories.map(category => (
+              <div key={category.name} className={styles.categoryOption}>
+                  <h3>{category.name}</h3>
+                  <p>{category.description}</p>
+                  <button className={styles.readingTypeButton} onClick={() => onSelectCategory(category)}>
+                      Select {category.name}
+                  </button>
+              </div>
+          ))}
       </div>
-      <button className={styles.selectSpreadButton} onClick={onSelectDailyCard}>
-        Draw Today's Card
-      </button>
-    </div>
   );
 }
 
@@ -91,26 +145,18 @@ export function ThreeCardReadingSelection({ category, description, onSelectSprea
   );
 }
 
-export function CategorySelection({ onSelectCategory }) {
-  const categories = [
-      { name: 'Linear', description: 'Understand linear progressions like past, present, and future.' },
-      { name: 'Balanced', description: 'Explore balanced aspects such as mind, body, and spirit.' },
-      { name: 'Foundational', description: 'Get foundational advice based on different scenarios.' },
-      { name: 'Crossed', description: 'Resolve conflicts with spreads that identify challenges and provide solutions.' }
-  ];
 
+export function OneCardDailyReadingSelection({ onSelectDailyCard }) {
   return (
-      <div className={styles.buttonContainer}>
-          {categories.map(category => (
-              <div key={category.name} className={styles.categoryOption}>
-                  <h3>{category.name}</h3>
-                  <p>{category.description}</p>
-                  <button className={styles.readingTypeButton} onClick={() => onSelectCategory(category)}>
-                      Select {category.name}
-                  </button>
-              </div>
-          ))}
+    <div className={styles.oneCardDailyContainer}>
+      <div className={styles.categoryHeader}>
+        <h2>One-Card Daily Tarot</h2>
+        <p>Draw a single card for a quick snapshot of your day. What does the universe want you to know today?</p>
       </div>
+      <button className={styles.selectSpreadButton} onClick={onSelectDailyCard}>
+        Draw Today's Card
+      </button>
+    </div>
   );
 }
 
@@ -225,7 +271,8 @@ export function LoveReadingSelection({ onSelectLoveSpread }) {
   }
 
 
-  export function ShuffleAndCut({ isShuffling, startShuffling, stopShuffling, displayCutUI, deck }) {
+  export function ShuffleAndCutold({ isShuffling, startShuffling, stopShuffling, displayCutUI, deck }) {
+    console.log("is shuffling", isShuffling)
     return (
         <div className={styles.shuffleContainer}>
             {isShuffling ? (
@@ -237,6 +284,9 @@ export function LoveReadingSelection({ onSelectLoveSpread }) {
                             </div>
                         ))}
                     </div>
+                    <button onClick={startShuffling} className={`${styles.shuffleButton} ${styles.startShufflingButton}`}>
+                        Start Shuffling
+                    </button>
                     <button onClick={stopShuffling} className={`${styles.shuffleButton} ${styles.stopShufflingButton}`}>
                         Stop Shuffling
                     </button>
@@ -254,32 +304,7 @@ export function LoveReadingSelection({ onSelectLoveSpread }) {
     );
 }
 
-  
-  // In your main component, control these actions based on the selected reading type
-  const startShuffling = () => {
-      setIsShuffling(true);
-      // simulate shuffling logic here
-      setTimeout(() => {
-        setIsShuffling(false);
-        setCurrentStep(currentStep + 1); // Proceed to cut or draw
-      }, 3000); // Simulate 3 seconds of shuffling
-  };
-  
-  const displayCutUI = () => {
-      // Allow the user to cut the deck if not a simple one-card draw
-      if (selectedReadingType.type !== 'One-Card Daily') {
-        return (
-          <div>
-            <p>Please cut the deck:</p>
-            <button onClick={() => setCurrentStep(currentStep + 1)}>Cut Here</button>
-          </div>
-        );
-      }
-  };
-  
-  // Adjust these steps based on user input or the selected type of reading.
-  
-  
+
 
 export function CardSelection({ deck, maxCards, onCardSelect }) {
   return (

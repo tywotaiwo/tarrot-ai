@@ -68,8 +68,8 @@
 }
 
 .cardImage {
-    width: 100px;
-    height: 160px;
+    width: 200px;
+    height: 300px;
     transition: transform 0.3s; /* Smooth transition for images */
 }
 .cardImage {
@@ -113,7 +113,7 @@
     transition: background-color 0.3s, box-shadow 0.3s;
 }
 .cardStackContainer {
-    width: 100px; 
+    width: 200px; 
     height: 140px; 
     position: relative;
     overflow: hidden; 
@@ -294,33 +294,6 @@
   
 
   
-.stopShufflingButton {
-    padding: 15px 30px; /* Consistent with other buttons */
-    font-size: 18px; /* Large text for visibility */
-    background-color: #ff6347; /* Vibrant red color for urgency */
-    color: #ffffff; /* White text for contrast */
-    border: none;
-    border-radius: 20px; /* Rounded edges */
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Slight shadow for depth */
-    transition: background-color 0.3s, transform 0.3s; /* Smooth transition for interactions */
-    width: auto; /* Remove full width */
-    max-width: 300px; /* Maximum button width, adjust as necessary */
-    margin: 10px auto; /* Top and bottom margin of 10px, left and right auto for centering */
-   
-}
-
-.stopShufflingButton:hover {
-    background-color: #e05342; /* A slightly darker shade on hover for tactile feedback */
-    transform: translateY(-2px); /* Subtle lift effect */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Increased shadow when hovered */
-}
-
-.stopShufflingButton, .activityIndicator {
-    width: 100%; /* Make button and text take full width of their container */
-    text-align: center; /* Center text inside the button and the 'Shuffling...' text element */
-    margin: 10px 0; /* Add some vertical margin for spacing */
-}
 
 
 /* Container for all spread options */
@@ -545,64 +518,3 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Flatter shadow on press */
 }
 
-
-/* shuffle animation */
-/* Container for the shuffling and cutting UI */
-.shuffleContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-/* Styling for the shuffle animation container */
-.cardShuffleAnimation {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-/* Button styles common for shuffle */
-.shuffleButton {
-    padding: 12px 25px;
-    font-size: 16px;
-    color: white;
-    background-color: #673ab7; /* Deep purple for visibility */
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    margin-top: 10px;
-}
-
-.shuffleButton:hover {
-    background-color: #8561c5; /* Lighter purple on hover */
-}
-
-/* Specific styling for stopping the shuffling */
-.stopShufflingButton {
-    background-color: #ff6347; /* Red color for stopping action */
-}
-
-.stopShufflingButton:hover {
-    background-color: #e05342; /* Darker red on hover */
-}
-
-/* Card animation during shuffling */
-.cardAnimation {
-    width: 100px;
-    height: 160px;
-    overflow: hidden;
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-.cardAnimation img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
