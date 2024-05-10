@@ -1,56 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styles from '../styles/Home.module.css';
 
-export function CutDeck({ deck, onCutsComplete }) {
-  const [cuts, setCuts] = useState([]);
-  const [cutDecks, setCutDecks] = useState([]);
 
-  const handleCut = (index) => {
-    const newCuts = [...cuts, index];
-    setCuts(newCuts);
-    const firstCut = deck.slice(0, index);
-    const secondCut = deck.slice(index, 2 * index);
-    const thirdCut = deck.slice(2 * index);
-
-    if (newCuts.length === 1) {
-      setCutDecks([firstCut, secondCut, thirdCut]);
-    } else if (newCuts.length === 3) {
-      onCutsComplete([firstCut[0], secondCut[0], thirdCut[0]]);
-    }
-  };
-
-  return (
-    <div className={styles.cutContainer}>
-      <h2>Please make your cuts:</h2>
-      {cutDecks.length === 0 ? (
-        <input
-          type="range"
-          min="1"
-          max={deck.length}
-          defaultValue={Math.floor(deck.length / 3)}
-          className={styles.cutSlider}
-          onMouseUp={(e) => handleCut(parseInt(e.target.value))}
-          onTouchEnd={(e) => handleCut(parseInt(e.target.value))}
-        />
-      ) : (
-        cutDecks.map((pile, index) => (
-          <div key={index} className={styles.pile}>
-            <h3>Pile {index + 1}</h3>
-            <button onClick={() => handleCut(index)} className={styles.cutButton}>
-              Cut Here
-            </button>
-          </div>
-        ))
-      )}
-    </div>
-  );
-}
 
 export function ReadingTypeSelection({ onTypeSelect }) {
   const readingTypes = [
+    
+    { type: 'One-Card Daily', maxCards: 1 },
     { type: 'Three Card Spread', maxCards: 3 },
     { type: 'Celtic Cross Spread', maxCards: 10 },
-    { type: 'One-Card Daily', maxCards: 1 },
     { type: 'Love Spread', maxCards: 6 },
     { type: 'Career Spread', maxCards: 6 }
   ];
@@ -271,40 +229,6 @@ export function LoveReadingSelection({ onSelectLoveSpread }) {
   }
 
 
-  export function ShuffleAndCutold({ isShuffling, startShuffling, stopShuffling, displayCutUI, deck }) {
-    console.log("is shuffling", isShuffling)
-    return (
-        <div className={styles.shuffleContainer}>
-            {isShuffling ? (
-                <>
-                    <div className={styles.cardShuffleAnimation}>
-                        {deck.map((card, index) => (
-                            <div key={index} className={styles.cardAnimation}>
-                                <img src={card.image} alt={card.name} />
-                            </div>
-                        ))}
-                    </div>
-                    <button onClick={startShuffling} className={`${styles.shuffleButton} ${styles.startShufflingButton}`}>
-                        Start Shuffling
-                    </button>
-                    <button onClick={stopShuffling} className={`${styles.shuffleButton} ${styles.stopShufflingButton}`}>
-                        Stop Shuffling
-                    </button>
-                </>
-            ) : (
-                <>
-                    {!deck.length ? (
-                        <button onClick={startShuffling} className={styles.shuffleButton}>
-                            Shuffle Cards
-                        </button>
-                    ) : displayCutUI()}
-                </>
-            )}
-        </div>
-    );
-}
-
-
 
 export function CardSelection({ deck, maxCards, onCardSelect }) {
   return (
@@ -324,6 +248,52 @@ export function ReadingDisplay({ reading, onReset }) {
       <h2>Your Reading</h2>
       <p>{reading}</p>
       <button onClick={onReset} className={styles.resetButton}>Start Over</button>
+    </div>
+  );
+}
+
+
+export function CutDeck({ deck, onCutsComplete }) {
+  const [cuts, setCuts] = useState([]);
+  const [cutDecks, setCutDecks] = useState([]);
+
+  const handleCut = (index) => {
+    const newCuts = [...cuts, index];
+    setCuts(newCuts);
+    const firstCut = deck.slice(0, index);
+    const secondCut = deck.slice(index, 2 * index);
+    const thirdCut = deck.slice(2 * index);
+
+    if (newCuts.length === 1) {
+      setCutDecks([firstCut, secondCut, thirdCut]);
+    } else if (newCuts.length === 3) {
+      onCutsComplete([firstCut[0], secondCut[0], thirdCut[0]]);
+    }
+  };
+
+  return (
+    <div className={styles.cutContainer}>
+      <h2>Please make your cuts:</h2>
+      {cutDecks.length === 0 ? (
+        <input
+          type="range"
+          min="1"
+          max={deck.length}
+          defaultValue={Math.floor(deck.length / 3)}
+          className={styles.cutSlider}
+          onMouseUp={(e) => handleCut(parseInt(e.target.value))}
+          onTouchEnd={(e) => handleCut(parseInt(e.target.value))}
+        />
+      ) : (
+        cutDecks.map((pile, index) => (
+          <div key={index} className={styles.pile}>
+            <h3>Pile {index + 1}</h3>
+            <button onClick={() => handleCut(index)} className={styles.cutButton}>
+              Cut Here
+            </button>
+          </div>
+        ))
+      )}
     </div>
   );
 }
