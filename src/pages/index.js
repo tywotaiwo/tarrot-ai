@@ -155,7 +155,7 @@ export default function Home() {
             )
                 }
 
-                {currentStep > 1 &&currentStep <4 && (
+                {currentStep > 1  && (
                     <button onClick={goBack} className={styles.backButton}>Go Back</button>
                 )}
                 {currentStep === 1 && <ReadingTypeSelection onTypeSelect={selectReadingType} />}

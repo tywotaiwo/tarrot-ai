@@ -1,0 +1,106 @@
+import React, { useState } from 'react';
+import styles from '../styles/ThreeCardsCut.module.css';
+
+const ThreeCardCut = ({ deck, onCutsComplete }) => {
+    const [cutIndex, setCutIndex] = useState(null);
+    const [firstPart, setFirstPart] = useState(null);
+    const [secondPart, setSecondPart] = useState(null);
+    const [currentPhase, setCurrentPhase] = useState(0); // 0: before any cuts, 1: after first cut, 2: complete
+
+    // Handle the value change on the range input
+    const handleCut = (value) => {
+        setCutIndex(parseInt(value, 10));
+    };
+
+    // Confirm cut and proceed to the next phase or finalize cuts
+    const processCut = () => {
+        if (currentPhase === 0) {
+            const firstCut = deck.slice(0, cutIndex);
+            const remaining = deck.slice(cutIndex);
+            setFirstPart(firstCut);
+            setSecondPart(remaining);
+            setCurrentPhase(1);
+        } else if (currentPhase === 1) {
+            const secondCut = secondPart.slice(0, cutIndex - firstPart.length);
+            const thirdPart = secondPart.slice(cutIndex - firstPart.length);
+            onCutsComplete([firstPart, secondCut, thirdPart]);
+            setCurrentPhase(2);
+        }
+    };
+
+    return (
+        <div className={styles.container}>
+            <p className={styles.title}>Please cut the deck into three parts:</p>
+            <div className={styles.cardStacks}>
+                <div className={styles.stackContainer}>
+                    {firstPart ? (
+                        <div className={styles.cardStack}>
+                            {firstPart.map((card, index) => (
+                                <img
+                                    key={index}
+                                    src="/cards/card-back.webp"
+                                    alt={`Card ${index}`}
+                                    className={styles.cardImage}
+                                    style={{ transform: `translateY(${-index * 2}px)` }}
+                                />
+                            ))}
+                            <p className={styles.rangeText}>First cut completed</p>
+                        </div>
+                    ) : (
+                       
+                       
+                    
+                    
+                        <div className={styles.cardStack}>
+                       
+                       <div className={styles.placeholder}>Place for first cut</div>
+                    </div>
+                    
+                    )}
+                </div>
+                <div className={styles.stackContainer}>
+                    {secondPart && currentPhase === 1 ? (
+                        <div className={styles.cardStack}>
+                            {secondPart.map((card, index) => (
+                                <img
+                                    key={index}
+                                    src="/cards/card-back.webp"
+                                    alt={`Card ${index}`}
+                                    className={styles.cardImage}
+                                    style={{ transform: `translateY(${-index * 2}px)` }}
+                                />
+                            ))}
+                            <p className={styles.rangeText}>Ready for second cut</p>
+                        </div>
+                    ) : currentPhase < 2 ? (
+                        <div className={styles.cardStack}>
+                       
+                       <div className={styles.placeholder}>Place for second cut</div>
+                    </div>
+                    ) : null}
+                </div>
+                {currentPhase === 2 && (
+                    <div className={styles.stackContainer}>
+                        <div className={styles.cardStack}>
+                            <div className={styles.placeholder}>Cuts complete</div>
+                        </div>
+                    </div>
+                )}
+            </div>
+            <input
+                type="range"
+                min={1}
+                max={currentPhase === 0 ? deck.length - 1 : secondPart.length - 1}
+                value={cutIndex || 1}
+                onChange={(e) => handleCut(e.target.value)}
+                className={styles.rangeTrack}
+                disabled={currentPhase === 2}
+            />
+            <button className={styles.button} onClick={processCut} disabled={cutIndex === null || currentPhase === 2}>
+                {currentPhase === 0 ? "Make First Cut" : "Make Second Cut"}
+            </button>
+        </div>
+    );
+};
+
+export default ThreeCardCut;
