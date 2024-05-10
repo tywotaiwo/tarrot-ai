@@ -15,6 +15,7 @@ export const UserProvider = ({ children }) => {
                 const docRef = doc(db, "users", user.uid);
                 const docSnap = await getDoc(docRef);
                 if (docSnap.exists()) {
+                    console.log(docSnap.data())
                     setProfile({
                         uid: user.uid,
                         displayName: docSnap.data().displayName,

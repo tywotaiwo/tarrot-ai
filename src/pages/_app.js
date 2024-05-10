@@ -1,4 +1,4 @@
-
+import '../styles/tailwind.css'; // Ensure this path is correct
 import Navbar from '../components/Navbar';
 import { AuthProvider } from '../contexts/AuthContext';
 import { UserProvider } from '../contexts/UserContext';
